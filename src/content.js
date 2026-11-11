@@ -28,7 +28,8 @@
 
   let settings = { ...DEFAULTS };
   const tokens = new WeakMap(); // img -> latest apply token (avoids expando props on page elements)
-  let hiResBlocked = false; // set if the page refuses our data: images
+  let hiResErrors = 0;
+  const HIRES_ERROR_LIMIT = 3;
 
   // ------------------------------------------------------------- thumbnails
 
@@ -201,7 +202,7 @@
     const idx = Number(img.dataset.mfFrameIdx || 1);
 
     if (img.dataset.mfQuality === "hi") {
-      hiResBlocked = true; // page refused the data: image; stay on the plain frames
+      hiResErrors++;
       setFrame(img, id, idx, "mq");
     } else if (img.dataset.mfQuality === "mq") {
       setFrame(img, id, idx, "hq");
