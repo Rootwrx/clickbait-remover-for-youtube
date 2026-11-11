@@ -128,7 +128,13 @@
       if (tokens.get(img) !== token || img.dataset.mfId !== id || !settings.enabled) return;
       if (result) {
         const picked = pickFrame(result);
-        if (picked !== null && picked !== fixedIdx) {
+        if (picked === null) {
+          // No usable frame (all dull, or none exist; typical for live streams).
+          // Keep the uploader's thumbnail instead of showing a black/flat frame.
+          skipImg(img);
+          return;
+        }
+        if (picked !== fixedIdx) {
           idx = picked;
           setFrame(img, id, idx, "mq");
         }
@@ -162,6 +168,8 @@
     img.src = url;
   }
 
+  // Returns the frame index to show, or null when no frame is worth showing
+  // (caller then keeps the original thumbnail).
   function pickFrame(res) {
     const s = res.s;
     const bad = res.bad;
@@ -172,13 +180,15 @@
     const best = (arr) => arr.reduce((a, b) => (score(b) > score(a) ? b : a));
     const good = valid.filter((i) => !bad[i]);
 
-    if (settings.frame === "auto") return best(good.length ? good : valid);
+    // Every frame is dull: don't show one.
+    if (!good.length) return null;
+
+    if (settings.frame === "auto") return best(good);
 
     const want = FRAME_INDEX[settings.frame];
     if (!settings.skipDull) return want;
     if (s[want] != null && !bad[want]) return want;
-    if (good.length) return good.reduce((a, b) => (Math.abs(b - want) < Math.abs(a - want) ? b : a));
-    return want;
+    return good.reduce((a, b) => (Math.abs(b - want) < Math.abs(a - want) ? b : a));
   }
 
   // If an mq frame doesn't exist, try hq; if that fails too, restore the original.
