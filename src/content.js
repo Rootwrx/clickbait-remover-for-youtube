@@ -147,7 +147,7 @@
 
   // Swap the quick low-res frame for a sharp, letterbox-free one from the background worker.
   async function upgradeQuality(img, id, idx, token) {
-    if (!settings.hiRes || hiResBlocked) return;
+    if (!settings.hiRes || hiResErrors >= HIRES_ERROR_LIMIT) return;
     const url = await enqueue(() => chrome.runtime.sendMessage({ type: "image", id, idx }));
     if (!url) return;
     if (tokens.get(img) !== token || img.dataset.mfId !== id) return;
