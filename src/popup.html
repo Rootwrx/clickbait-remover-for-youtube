@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clickbait Remover for YouTube</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Clickbait Remover for YouTube</h1>
+    <label class="switch" title="Turn the extension on or off">
+      <input type="checkbox" id="enabled" role="switch" aria-label="Enabled">
+      <span class="track"></span>
+    </label>
+  </header>
+
+  <main id="panel">
+    <section aria-labelledby="frame-label">
+      <h2 id="frame-label">Which frame to show</h2>
+
+      <div class="strip" aria-hidden="true">
+        <div class="bar"></div>
+        <span class="notch" data-n="25"></span>
+        <span class="notch" data-n="50"></span>
+        <span class="notch" data-n="75"></span>
+      </div>
+
+      <div class="seg" role="radiogroup" aria-labelledby="frame-label" id="frame">
+        <button type="button" role="radio" data-value="25">25%</button>
+        <button type="button" role="radio" data-value="50">50%</button>
+        <button type="button" role="radio" data-value="75">75%</button>
+        <button type="button" role="radio" data-value="auto">Best</button>
+      </div>
+      <p class="hint" id="frame-hint"></p>
+    </section>
+
+    <section class="options">
+      <label class="row">
+        <span class="text">
+          <span class="name">Skip dull frames</span>
+          <span class="desc">Avoid black, washed-out or blurry frames</span>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="skipDull" role="switch">
+          <span class="track"></span>
+        </span>
+      </label>
+
+      <label class="row">
+        <span class="text">
+          <span class="name">Sharper images</span>
+          <span class="desc">Use full-size frames with black bars cropped off</span>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="hiRes" role="switch">
+          <span class="track"></span>
+        </span>
+      </label>
+
+      <label class="row">
+        <span class="text">
+          <span class="name">Peek at the original</span>
+          <span class="desc">Hover a thumbnail to see the uploader's version</span>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="hoverReveal" role="switch">
+          <span class="track"></span>
+        </span>
+      </label>
+
+      <div class="row slider" id="delayRow">
+        <span class="text">
+          <span class="name">Hover delay</span>
+        </span>
+        <input type="range" id="hoverDelay" min="0" max="1500" step="100" aria-label="Hover delay in milliseconds">
+        <output id="hoverDelayOut"></output>
+      </div>
+
+      <label class="row">
+        <span class="text">
+          <span class="name">Clean up titles</span>
+          <span class="desc">Remove emoji, ALL CAPS, hype tags and “!!!”</span>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="cleanTitles" role="switch">
+          <span class="track"></span>
+        </span>
+      </label>
+    </section>
+
+    <footer class="actions">
+      <button type="button" class="ghost" id="clearCache">Clear frame cache</button>
+      <button type="button" class="ghost" id="reset">Reset to defaults</button>
+    </footer>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>
